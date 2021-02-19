@@ -16,15 +16,16 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
+import Table from './Views/Components/table';
+import GitViewer from './Views/gitViewer';
 
 const screenWidth = Dimensions.get('window').width;
 
 const App = React$Node = () => {
 
   const [query, setQuery] = React.useState('');
+  const [user, setUser] = React.useState('');
   const [commits, setCommits] = React.useState([]);
-
-  
 
   return (
     <>
@@ -32,18 +33,36 @@ const App = React$Node = () => {
         <ScrollView>
           <View>
             <Text style={styles.label}>GitHub Project Commit Viewer</Text>
+            <View>
+              <Text styles={styles.label}>GitHub User</Text>
+              <TextInput
+                placeholder="Enter a Github User"
+                style={styles.input}
+                onChangeText={query => setUser(query)}
+                value={user}
+              />
+            </View>
+            <View>
+              <Text styles={styles.label}>GitHub Project</Text>
               <TextInput
                 placeholder="Enter a Github Project"
                 style={styles.input}
                 onChangeText={query => setQuery(query)}
                 value={query}
               />
+            </View>
               <TouchableOpacity
                 style={styles.button}
                 activeOpacity={0.8}
               >
               <Text style={styles.buttonText}>Get Commits</Text>
             </TouchableOpacity>
+          </View>
+          <GitViewer commits={commits} user={user} query={query} screenWidth={screenWidth}/>
+          <View style={styles.container}>
+              {commits.length > 0 ? (
+                <Text key={commits.sha}>{commits.sha}</Text>
+              ) : null}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -69,6 +88,8 @@ const styles = StyleSheet.create({
     borderColor: '#3a3a3a',
     borderWidth: 1,
     borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 10,
   },
   button: {
     height: 45,
