@@ -4,6 +4,12 @@ import {
     Text,
   } from 'react-native';
 
+
+/**
+ * Generates each row of the table
+ * @param {object} commit - a commit object from the commits array
+ * @param {int} indx - index of current position in array
+ */
 const GenerateRow = (commit, indx) => {
 
     return (

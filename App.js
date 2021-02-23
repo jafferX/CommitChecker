@@ -30,6 +30,10 @@ const App = React$Node = () => {
   const [commits, setCommits] = React.useState([]);
   const [working, setWorking] = React.useState(false);
 
+  /**
+   * This async function is responsible for grabbing commits from a specific project through the github api
+   * example url: https://api.github.com/repos/twitter/bootstrap/commits?per_page=25
+   */
   const _getCommits = async () => {
     setWorking(true);
     const commits = await RequestHandler.getCommits(user.trim(), project.trim(), 25);
@@ -45,6 +49,10 @@ const App = React$Node = () => {
     }
   }
 
+  /**
+   * Triggers an alert if a network error occurs
+   * @param {*} errorMessage - the message to be displayed
+   */
   const alert = (errorMessage) => {
     Alert.alert(
       'Commit List Retrieval Failed',
