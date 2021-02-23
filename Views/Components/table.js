@@ -7,21 +7,26 @@ import {
 const GenerateRow = (commit, indx) => {
 
     return (
-        <View style={{ flex: 1, flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'center', backgroundColor: indx % 2 > 0 ? '#d3d3d3' : '#e0ffff'}}>
+        <View style={{ flex: 1, flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'center', backgroundColor: indx % 2 > 0 ? '#d3d3d3' : '#e0ffff'}} key={commit.sha}>
             { /* These are the cells. You may even take parameters to display different data / react elements etc. */}
             <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center'}}>
                 <Text style={{textAlign: 'center'}}>
-                    {commit.author}
+                    {new Date(commit.commit.author.date).toString()}
+                </Text>
+            </View>
+            <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center'}}>
+                <Text style={{textAlign: 'center'}}>
+                    {commit.commit.author.name}
                 </Text>
             </View>
             <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center' }}>
                 <Text style={{textAlign: 'center'}}>
-                    {commit.hash}
+                    {commit.sha}
                 </Text>
             </View>
             <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center' }}>
                 <Text Text style={{textAlign: 'center'}}>
-                    {commit.message}
+                    {commit.commit.message}
                 </Text>
             </View>
         </View>
@@ -34,6 +39,11 @@ const Table = ({commits=[]}) => {
         <>
         <View style={{ flex: 1, flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'center', padding: 5}}>
             { /* These are the cells. You may even take parameters to display different data / react elements etc. */}
+            <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center'}}>
+                <Text style={{textAlign: 'center'}}>
+                    Date
+                </Text>
+            </View>
             <View style={{ flex: 1, alignSelf: 'stretch', justifyContent: 'center'}}>
                 <Text style={{textAlign: 'center'}}>
                     Author

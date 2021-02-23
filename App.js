@@ -14,18 +14,51 @@ import {
   StatusBar,
   Dimensions,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-import Table from './Views/Components/table';
+import RequestHandler from './api/requestHandler';
 import GitViewer from './Views/gitViewer';
 
 const screenWidth = Dimensions.get('window').width;
 
 const App = React$Node = () => {
 
-  const [query, setQuery] = React.useState('');
+  const [project, setProject] = React.useState('');
   const [user, setUser] = React.useState('');
   const [commits, setCommits] = React.useState([]);
+  const [working, setWorking] = React.useState(false);
+
+  const _getCommits = async () => {
+    setWorking(true);
+    const commits = await RequestHandler.getCommits(user.trim(), project.trim(), 25);
+    //console.log(commits);
+    if (commits.error) {
+        console.log(commits.error.response);
+        alert(commits.error.toString());
+        setWorking(false);
+    } else {
+      setCommits(commits.data);
+      setWorking(false);
+      //console.log(commits.data[0]);
+    }
+  }
+
+  const alert = (errorMessage) => {
+    Alert.alert(
+      'Commit List Retrieval Failed',
+        errorMessage,
+      [
+        { 
+          text: 'OK', 
+          onPress: () => console.log('OK Pressed') 
+        }
+      ],
+      { cancelable: false }
+    );
+  } 
+
 
   return (
     <>
@@ -47,22 +80,22 @@ const App = React$Node = () => {
               <TextInput
                 placeholder="Enter a Github Project"
                 style={styles.input}
-                onChangeText={query => setQuery(query)}
-                value={query}
+                onChangeText={project => setProject(project)}
+                value={project}
               />
             </View>
               <TouchableOpacity
                 style={styles.button}
                 activeOpacity={0.8}
+                disabled={project === '' || user === '' ? true : false}
+                onPress={_getCommits}
               >
               <Text style={styles.buttonText}>Get Commits</Text>
             </TouchableOpacity>
           </View>
-          <GitViewer commits={commits} user={user} query={query} screenWidth={screenWidth}/>
+          <GitViewer commits={commits} user={user} query={project} screenWidth={screenWidth}/>
           <View style={styles.container}>
-              {commits.length > 0 ? (
-                <Text key={commits.sha}>{commits.sha}</Text>
-              ) : null}
+            <ActivityIndicator size="large" color="#0000ff" animating={working}/>
           </View>
         </ScrollView>
       </SafeAreaView>
