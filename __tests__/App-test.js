@@ -12,3 +12,8 @@ import renderer from 'react-test-renderer';
 it('renders correctly', () => {
   renderer.create(<App />);
 });
+
+it('has child a element', () => {
+    const tree = renderer.create(<App />).toJSON();
+    expect(tree.children.length).toBe(1);
+})
