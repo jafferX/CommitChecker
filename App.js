@@ -1,5 +1,5 @@
 /**
- * React Native App
+ * React Native App to retrieve a list of commits
  * @format
  * @flow strict-local
  */
